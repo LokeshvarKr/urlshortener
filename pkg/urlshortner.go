@@ -1,16 +1,31 @@
 package pkg
 
-import "net/http"
+//baseURL is constant to add prefix in short URL
+const baseURL = "http://infra.cd/"
 
-func ShortURL(w http.ResponseWriter, r *http.Request) {
-
+// ProcessRequestURLShortData takes RequestURLShort data and process and finally return ResponseURLShort
+func ProcessRequestURLShortData(requesltURLShort *RequestURLShort) *ResponseURLShort {
+	url := requesltURLShort.ActualURL
+	shortURL := URLShortener(url)
+	responseURLShort := ResponseURLShort{
+		ActualURL: url,
+		ShortURL:  shortURL,
+	}
+	return &responseURLShort
 }
 
-func ActualURL(w http.ResponseWriter, r *http.Request) {
+// URLShortener takes actual long url and it returns short url for the given url
+func URLShortener(url string) string {
+	shortURL := randomStringAlgorithm()
+	for {
+		if _, ok := database[shortURL]; !ok {
+			break
+		}
+		shortURL = randomStringAlgorithm()
+	}
 
-}
+	// store url corresponding to shortURL
+	database[shortURL] = url
 
-func HomePage(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(200)
-	w.Write([]byte("URL shortner home page"))
+	return baseURL + shortURL
 }
