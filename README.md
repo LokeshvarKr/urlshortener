@@ -17,7 +17,7 @@ or
     docker run -d -p 8081:8081 <urlshortener ImageId>
 
 
-## To make check if service is runnig inside container
+## To check if service is runnig inside container
 go to any web browser and type http://localhost:8081/home and send request 
 
 you will be able to see output like "URL shortner home page"
