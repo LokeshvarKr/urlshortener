@@ -1,10 +1,10 @@
 package pkg
 
-type RequestURLShort struct {
-	ActualURL string `json:"actualURL"`
+type RequestURL struct {
+	URL string `json:"url"`
 }
 
-type ResponseURLShort struct {
+type ResponseURL struct {
 	ActualURL string `json:"actualURL"`
 	ShortURL  string `json:"shortURL"`
 }

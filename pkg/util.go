@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"math/rand"
+	"net/url"
 	"time"
 )
 
@@ -17,12 +18,6 @@ const (
 // So not considering 4 characters  0(zero), capital O, 1(one), small l  ----> 0O1l
 // only 58 charaters will be used in short generated url
 var lookUp []rune = []rune("abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ23456789")
-
-// database map is in-memory database
-var database = make(map[string]string)
-
-// firstime is set to false initially , it is basically to indicate that we need to seed the rand in first call of RandomString()
-var firstime = false
 
 // use LookUp[] to convert random integer into base58 format
 func base58(n int) string {
@@ -44,14 +39,21 @@ func base58(n int) string {
 
 func randomStringAlgorithm() string {
 	// in first call only, seed with crruent unix time to generate random unmber
-	if firstime {
-		firstime = true
-		t := time.Now().UnixNano()
-		rand.Seed(t)
-	}
+	t := time.Now().UnixNano()
+	rand.Seed(t)
 
 	randInt := rand.Intn(max-min+1) + min
 	output := base58(randInt)
 	return output
 
+}
+
+//CheckValidRequestURL validates if given url domain name is our domain name
+// if given url domain name is our domain then return false (means says invalid url)
+func CheckValidRequestURL(actualURL string) bool {
+	u, err := url.ParseRequestURI(actualURL)
+	if err != nil || u.Host == "" || u.Host == baseURL {
+		return false
+	}
+	return true
 }

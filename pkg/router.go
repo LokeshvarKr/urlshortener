@@ -22,18 +22,23 @@ func ShortURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// read Body
-	requestURLShort := &RequestURLShort{}
+	requestURL := &RequestURL{}
 	d := json.NewDecoder(r.Body)
 	d.DisallowUnknownFields()
-	err := d.Decode(requestURLShort)
+	err := d.Decode(requestURL)
 	if err != nil {
 		// bad JSON or unrecognized json field
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
+	if !CheckValidRequestURL(requestURL.URL) {
+		http.Error(w, "invalid url", http.StatusBadRequest)
+		return
+	}
+
 	// process RequestURLShort data and get ResponseURLShort
-	responseURLShort := ProcessRequestURLShortData(requestURLShort)
+	responseURL := ProcessRequestURLAndGetResponseURL(requestURL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -41,16 +46,47 @@ func ShortURL(w http.ResponseWriter, r *http.Request) {
 
 	// encode request into json
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(responseURLShort)
+	err = json.NewEncoder(w).Encode(responseURL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 }
 
-// ShortURL Short given URL (POST /actualurl)
+// ActualURL returns atual url to given short URL (POST /actualurl)
 func ActualURL(w http.ResponseWriter, r *http.Request) {
 
+	headerContentTtype := r.Header.Get("Content-Type")
+	if headerContentTtype != "application/json" {
+		http.Error(w, "Content Type is not application/json", http.StatusUnsupportedMediaType)
+		return
+	}
+
+	// read Body
+	requestURL := &RequestURL{}
+	d := json.NewDecoder(r.Body)
+	d.DisallowUnknownFields()
+	err := d.Decode(requestURL)
+	if err != nil {
+		// bad JSON or unrecognized json field
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Retrive actual url from db and get ResponseURLShort
+	responseURL, err := RetriveActualURLAndGetResponseURL(requestURL)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// encode request into json
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(responseURL)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 }
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
