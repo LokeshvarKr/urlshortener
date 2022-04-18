@@ -50,7 +50,7 @@ func randomStringAlgorithm() string {
 
 //CheckValidRequestURL validates if given url domain name is our domain name
 // if given url domain name is our domain then return false (means says invalid url)
-func CheckValidRequestURL(actualURL string) bool {
+func checkValidRequestURL(actualURL string) bool {
 	u, err := url.ParseRequestURI(actualURL)
 	if err != nil || u.Host == "" || u.Host == baseURL {
 		return false

@@ -32,7 +32,7 @@ func ShortURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !CheckValidRequestURL(requestURL.URL) {
+	if !checkValidRequestURL(requestURL.URL) {
 		http.Error(w, "invalid url", http.StatusBadRequest)
 		return
 	}
@@ -89,6 +89,7 @@ func ActualURL(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// HomePage ...
 func HomePage(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 	w.Write([]byte("URL shortner home page"))

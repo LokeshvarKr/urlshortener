@@ -5,7 +5,7 @@ import "strings"
 //baseURL is constant to add prefix in short URL
 const baseURL = "http://infra.cd/"
 
-// ProcessRequestURLShortData takes RequestURLShort data and process and finally return ResponseURLShort
+// ProcessRequestURLAndGetResponseURL takes RequestURLShort data and process and finally return ResponseURLShort
 func ProcessRequestURLAndGetResponseURL(requesltURLShort *RequestURL) *ResponseURL {
 	url := requesltURLShort.URL
 	url = strings.Trim(url, " ")
