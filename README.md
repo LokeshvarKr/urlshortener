@@ -5,7 +5,13 @@
 
 
 ## To build docker image
-    docker build -t urlshortner
+without multistage
+
+    docker build -t urlshortner .
+
+with mulitstage
+
+    docker build -t urlshortener -f Dockerfile.multistage .
 
 
 ## To run docker container 
@@ -44,3 +50,11 @@ You will be able to see output like this
 
     {"actualURL":"http://veryLoNguRl/v1/api/LLongGUrrrLl/8988","shortURL":"http://infra.cd/gaYyrp"}
 
+
+
+
+# To run integration tests
+
+integration test code is under devlopment phase 
+
+    make integration-tests
