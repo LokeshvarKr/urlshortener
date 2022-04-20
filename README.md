@@ -33,7 +33,7 @@ you will be able to see output like "URL shortner home page"
 
 go to terminal and make http request using curl
     
-    curl -X POST -H "Content-Type: application/json" -d "{\"actualURL\": \"http://veryLoNguRl/v1/api/LLongGUrrrLl/8988\"}" http://localhost:8081/shorturl
+    curl -X POST -H "Content-Type: application/json" -d "{\"url\": \"http://veryLoNguRl/v1/api/LLongGUrrrLl/8988\"}" http://localhost:8081/shorturl
 
 You will be able to see output like this 
     
